@@ -4,46 +4,26 @@ const Order=require("../Models/order.model");
 const OrderItem=require("../Models/orderItem.model");
 
 const createOrder = async (user, shipAddress) => {
-    // console.log("User:", user);
-    // console.log("Ship Address:", shipAddress.form);
-
     try {
         let address;
 
         if (shipAddress._id) {
             address = await Address.findById(shipAddress._id);
         } else {
-            // Logging the shipAddress before saving
-            // console.log("Creating new address with:", shipAddress);
-
-            // Check if all required fields are present
             if (!shipAddress.form.firstname || !shipAddress.form.lastname || !shipAddress.form.address || !shipAddress.form.state || !shipAddress.form.pincode || !shipAddress.form.mobile || !shipAddress.form.email) {
                 throw new Error("Missing required address fields");
             }
 
             address = new Address(shipAddress.form);
-            // console.log("addres",address);
             address.user = user; // Assuming the user field should be the user ID
-            // console.log('hi');
-            // console.log("11",address);
             await address.save();
-            // console.log('hi');
-            // console.log("122",address);
             user.address.push(address);
-            // console.log(user);
             await user.save();
         }
 
-        // console.log('hi');
-
-        // Find the user's cart
         const cart = await cartService.findUserCart(user._id);
         const orderItems = [];
-        // console.log("cartItem",cart);
-
-        // Create order items from cart items
         for (const item of cart.cartItems) {
-            // console.log("clicked");
             const orderItem = new OrderItem({  // Corrected the model name here
                 price: item.price,
                 product: item.product,
@@ -54,9 +34,6 @@ const createOrder = async (user, shipAddress) => {
             const createOrderItem = await orderItem.save();
             orderItems.push(createOrderItem);
         }
-
-        // console.log("clicked");
-        // Create the order
         const createOrder = new Order({
             user: user._id,  // Assuming the user field should be the user ID
             orderItems,
@@ -65,16 +42,11 @@ const createOrder = async (user, shipAddress) => {
             shippingAddress: address,  // Corrected the field name here
             orderStatus: "CREATED",
         });
-
-        
-        // Save the order
         const saveOrder = await createOrder.save();
-        // console.log("saveOrder",saveOrder);
-        // console.log("click");
         return saveOrder;
     } catch (error) {
         console.error("Error creating order:", error);
-        throw error; // Rethrow the error for further handling if needed
+        throw error; 
     }
 };
 
@@ -83,7 +55,6 @@ const placeOrder=async(orderId)=>{
     const order=await findOrderById(orderId);
 
     order.orderStatus="PLACED";
-    // order.paymentDetails.paymentStatus="COMPLETED"
 
     return await order.save();
 }

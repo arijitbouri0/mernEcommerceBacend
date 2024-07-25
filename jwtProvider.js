@@ -13,7 +13,7 @@ const getUserIdFromToken = (token) => {
         // console.log("jwtProvider",decodedToken.userId);
         return decodedToken.userId;
     } catch (error) {
-        console.error('Error decoding token:', error.message);
+        // console.error('Error decoding token:', error.message);
         throw new Error('Invalid or expired token');
     }
 };

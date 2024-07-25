@@ -5,7 +5,6 @@ const bcrypt=require("bcrypt");
 
 const register = async (req, res) => {
     try {
-        console.log(req.body)
         const user = await userService.createUser(req.body);
         const jwt=jwtProvider.generateToken(user._id);
 

@@ -5,7 +5,6 @@ const createOrder=async(req,res)=>{
     // console.log("user1",user,req.body);
     try{
         const createOrder=await orderService.createOrder(user,req.body);
-        console.log("createOrder",createOrder);
         return res.status(201).send(createOrder);
     } catch(error){
         return res.status(500).send({error:error.message})

@@ -4,7 +4,7 @@ const productService=require("../Service/product.service")
 const createProduct=async(req,res)=>{
     try{
         const product=await productService.createProduct(req.body);
-        console.log(product);
+        // console.log(product);
         return res.status(201).send(product);
     } catch(error){
         return res.status(500).send({error:error.message});
@@ -33,7 +33,7 @@ const updateProduct=async(req,res)=>{
 
 const findProductById=async(req,res)=>{
     const productId=req.params.id;
-    console.log(productId);
+    // console.log(productId);
     try{
         const product=await productService.findProductById(productId);
         return res.status(201).send(product);

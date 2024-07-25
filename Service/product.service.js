@@ -48,7 +48,8 @@ const createProduct = async (reqData) => {
         color: reqData.color,
         sizes: reqData.sizes,
         imageUrl: reqData.imageUrl,
-        categories: thirdLevel._id,
+        // categories: thirdLevel._id,
+        categories: topLevel._id,
     });
 
     return await product.save();
@@ -71,10 +72,13 @@ const findProductById = async (id) => {
     return product;
 };
 
-const getAllProducts = async ({ page = 1, category, minPrice, maxPrice, sort }) => {
-    const query = {};
+const getAllProducts = async ({ page , category, minPrice, maxPrice, sort }) => {
+    let query = {};
     if (category && category !== 'all') {
-        query.category = category;
+        const existCategory=await Category.findOne({name:category});
+        if(existCategory){
+         query.categories=existCategory._id;
+        }
     }
     if (minPrice || maxPrice) {
         query.price = {};
@@ -90,12 +94,11 @@ const getAllProducts = async ({ page = 1, category, minPrice, maxPrice, sort }) 
             sortOption.price = -1;
         }
     }
-
     const products = await Product.find(query)
         .sort(sortOption)
         .skip((page - 1) * 10)
         .limit(10);
-    
+        
     const totalElements = await Product.countDocuments(query);
 
     return {

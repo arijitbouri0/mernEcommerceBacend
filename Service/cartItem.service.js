@@ -47,7 +47,6 @@ const updateCartItem=async(userId,cartItemId,cartItemData)=>{
 
 const removeCartItem=async(userId,cartItemId)=>{
     try {
-        console.log("service",cartItemId);
         const cartItem = await findCartItemById(cartItemId);
 
         if (!cartItem) {

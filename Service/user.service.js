@@ -56,7 +56,7 @@ const getUserProfileByToken = async (token) => {
     try {
         const userId = jwtProvider.getUserIdFromToken(token);
         const user = (await findUserByID(userId));
-        console.log("User found:", user);
+        // console.log("User found:", user);
         if (!user) {
             throw new Error(`user not found: ${userId}`);
         }
