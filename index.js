@@ -10,7 +10,8 @@ const userRouters = require("./Routes/user.router");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
-connectToMongoDB("mongodb://127.0.0.1:27017/ecommerce").then(() =>
+
+connectToMongoDB(process.env.url).then(() =>
   console.log("MongoDb connected")
 );
 
